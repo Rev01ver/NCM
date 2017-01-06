@@ -1,0 +1,7 @@
+*.sqlite
+venv/
+__pycache__/
+.git/
+.idea/
+.DS_Store
+config_db.py
