@@ -1,8 +1,8 @@
-# Import flask and template operators
 from flask import Flask, render_template
-
-# Import SQLAlchemy
-from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+from config import *
 
 # Define the WSGI application object
 app = Flask(__name__)
@@ -10,19 +10,10 @@ app = Flask(__name__)
 # Configurations
 app.config.from_object('config')
 
-# Define the database object which is imported
-# by modules and controllers
-db = SQLAlchemy(app)
-
-
-# Define a base model for other database tables to inherit
-class Base(db.Model):
-    __abstract__ = True
-
-    id = db.Column(db.Integer, primary_key=True)
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
-                              onupdate=db.func.current_timestamp())
+engine = create_engine(SQLALCHEMY_DATABASE_URI)
+db_session = scoped_session(sessionmaker(bind=engine))
+Base = declarative_base()
+Base.query = db_session.query_property()
 
 
 # Sample HTTP error handling
@@ -32,14 +23,11 @@ def not_found(error):
 
 
 # Import a module / component using its blueprint handler variable (mod_auth)
-from app.mod_auth.controllers import mod_auth as auth_module
 from app.mod_ncm.controllers import mod_ncm as ncm_module
 
 # Register blueprint(s)
-app.register_blueprint(auth_module)
 app.register_blueprint(ncm_module)
 # ..
 
 # Build the database:
-# This will create the database file using SQLAlchemy
-db.create_all()
+Base.metadata.create_all(bind=engine)
