@@ -4,7 +4,6 @@ from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey
 
 Base = declarative_base()
 
-
 class Host(Base):
     __tablename__ = 'host'
     id = Column(Integer, primary_key=True)
