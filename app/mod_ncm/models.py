@@ -56,6 +56,8 @@ class Configuration(Base):
         return '<Configuration {} {}'.format(self.config_type, self.datetime)
 
 
+
+
 # if __name__ == "__main__":
 #     Base.metadata.create_all(bind=engine)
 
