@@ -1,6 +1,6 @@
 import paramiko
 
-def get_cisco_conf(host,username,password,config_type)
+def get_cisco_conf(host,username,password,config_type):
     hostname = '5.35.23.196'
     port = 3000
     username = ''
