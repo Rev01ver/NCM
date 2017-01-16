@@ -1,8 +1,9 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey
 
-# вавав
+
 Base = declarative_base()
+
 
 class Host(Base):
     __tablename__ = 'host'
@@ -42,8 +43,8 @@ class Configuration(Base):
     __tablename__ = 'configuration'
     id = Column(Integer, primary_key=True)
     config_type = Column(String(50))
-    datetime = Column(String(50))
-    data = Column(String(50))
+    datetime = Column(DateTime)
+    data = Column(Text)
     host_id = Column(Integer, ForeignKey('host.id'))
 
     def __init__(self, config_type=None, datetime=None, data=None, host_id=None):

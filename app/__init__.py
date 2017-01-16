@@ -24,10 +24,12 @@ def not_found(error):
 
 # Import a module / component using its blueprint handler variable (mod_auth)
 from app.mod_ncm.controllers import mod_ncm as ncm_module
+from app.mod_ncm.controllers import mod_test as test_module
 
 # Register blueprint(s)
 app.register_blueprint(ncm_module)
+app.register_blueprint(test_module)
 # ..
 
 # Build the database:
-# Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)

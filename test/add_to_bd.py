@@ -1,5 +1,6 @@
 from app import db_session
 from app.mod_ncm.models import User, Configuration, Host
+import datetime
 
 
 def add_user():
@@ -17,7 +18,8 @@ def add_host():
 
 
 def add_config():
-    configuration = Configuration('type', '12.12.2016', 'some configs', 1)
+    configuration = Configuration(config_type='type', datetime=datetime.date(2007, 12, 5),
+                                  data='some configs', host_id=1)
     db_session.add(configuration)
     db_session.commit()
     print('ok')
