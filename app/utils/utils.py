@@ -12,7 +12,7 @@ def get_rev_by_id():
 def save_rev():
     return None
 
-#Уведомление о том, что изменения в running-config не сохранены в NVRAM
+#Уведомление о том, что изменения в running-config не сохранены в startup-config
 def do_wr(hostname,username,password):
     run_save_date = get_conf_date(hostname, username, password, 10)
     start_save_date = get_conf_date(hostname, username, password, 20)
