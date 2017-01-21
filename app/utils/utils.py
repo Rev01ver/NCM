@@ -1,7 +1,6 @@
 from app.mod_ncm.models import Host
 from app.mod_ncm.models import Configuration
 
-from app.mod_getconf import get_conf
 
 import paramiko
 import re, datetime
@@ -90,9 +89,9 @@ def get_conf(hostname,username,password,type):
     return conf
 
 #Получение runnning-config с циски
-def get_cisco_run_conf():
-    return None
+def get_cisco_run_conf(hostname, username, password):
+    return get_conf(hostname, username, password, 1)
 
 #Получение runnning-config с циски
-def get_cisco_start_conf():
-    return None
+def get_cisco_start_conf(hostname, username, password):
+    return get_conf(hostname, username, password, 2)
