@@ -4,17 +4,17 @@ import datetime
 
 
 def add_user():
-    user = User('Vasya', '12345', 1)
+    user = User('serg', '', 1)
     db_session.add(user)
     db_session.commit()
-    print('ok')
+    print('add user ok')
 
 
 def add_host():
-    host = Host('cisco01', '192.168.0.23', 'cisco', 1)
+    host = Host('cisco01', '87.228.74.62', 'cisco', 1)
     db_session.add(host)
     db_session.commit()
-    print('ok')
+    print('add host ok')
 
 
 def add_config():
@@ -22,10 +22,10 @@ def add_config():
                                   data='some configs', host_id=1)
     db_session.add(configuration)
     db_session.commit()
-    print('ok')
+    print('add conf ok')
 
 
 if __name__ == '__main__':
     add_user()
     add_host()
-    add_config()
+    # add_config()
