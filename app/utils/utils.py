@@ -12,6 +12,15 @@ def get_rev_by_id():
 def save_rev():
     return None
 
+#Уведомление о том, что изменения в running-config не сохранены в startup-config
+def do_wr(hostname,username,password):
+    run_save_date = get_conf_date(hostname, username, password, 10)
+    start_save_date = get_conf_date(hostname, username, password, 20)
+    if start_save_date < run_save_date:
+        alarm = 1
+    else:
+        alarm = 0
+    return alarm
 
 # Получение пользователя, который правил конфиг циски
 def get_conf_editor(hostname, username, password, type):
