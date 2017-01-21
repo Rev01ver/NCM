@@ -1,6 +1,4 @@
-from app.mod_ncm.models import Host
-from app.mod_ncm.models import Configuration
-
+from app.mod_ncm.models import Host, Configuration, User
 
 import paramiko
 import re, datetime
@@ -9,6 +7,18 @@ import re, datetime
 def get_all_hosts():
     hosts = Host.query.all()
     return hosts
+
+
+def get_host_by_id(host_id):
+    host = Host
+    host = Host.query.filter(host.id == host_id).first()
+    return host
+
+
+def get_user_by_id(user_id):
+    user = User
+    user = User.query.filter(user.id == user_id).first()
+    return user
 
 
 def get_all_configs_by_host_id(host_id):
@@ -25,12 +35,11 @@ def get_all_configs():
     return configs
 
 
-
-#проверка даты на cisco (секунды не берем в расчет)
-def check_date(hostname,username,password):
+# проверка даты на cisco (секунды не берем в расчет)
+def check_date(hostname, username, password):
     cisco_date = get_conf_date(hostname, username, password, 3)
-    today_time = datetime.datetime.strftime(datetime.datetime.today(),"%Y-%m-%d %H:%M")
-    cisco_date = datetime.datetime.strftime(cisco_date,"%Y-%m-%d %H:%M")
+    today_time = datetime.datetime.strftime(datetime.datetime.today(), "%Y-%m-%d %H:%M")
+    cisco_date = datetime.datetime.strftime(cisco_date, "%Y-%m-%d %H:%M")
     if cisco_date != today_time:
         bad_date = 1
     else:
@@ -38,8 +47,8 @@ def check_date(hostname,username,password):
     return bad_date
 
 
-#Уведомление о том, что изменения в running-config не сохранены в startup-config
-def do_wr(hostname,username,password):
+# Уведомление о том, что изменения в running-config не сохранены в startup-config
+def do_wr(hostname, username, password):
     run_save_date = get_conf_date(hostname, username, password, 10)
     start_save_date = get_conf_date(hostname, username, password, 20)
     if start_save_date < run_save_date:
@@ -48,6 +57,7 @@ def do_wr(hostname,username,password):
         alarm = 0
     return alarm
 
+
 # Получение пользователя, который правил конфиг циски
 def get_conf_editor(hostname, username, password, type):
     editor = get_conf(hostname, username, password, type)
@@ -55,28 +65,29 @@ def get_conf_editor(hostname, username, password, type):
     return (n_editor[-1])
 
 
-#Получение даты конфигов циски
-def get_conf_date(hostname,username,password,type):
-    date_temp = get_conf(hostname,username,password,type)
-    hours = re.findall('\d+:\d+:\d+',date_temp)
-    date = re.findall('\w{3} \d{2} \d{4}',date_temp)
+# Получение даты конфигов циски
+def get_conf_date(hostname, username, password, type):
+    date_temp = get_conf(hostname, username, password, type)
+    hours = re.findall('\d+:\d+:\d+', date_temp)
+    date = re.findall('\w{3} \d{2} \d{4}', date_temp)
     time = (''.join(hours)) + ' ' + (''.join(date))
-    time = datetime.datetime.strptime(time,'%H:%M:%S %b %d %Y')
+    time = datetime.datetime.strptime(time, '%H:%M:%S %b %d %Y')
     return time
 
-#Получение конфига с циски
-def get_conf(hostname,username,password,type):
+
+# Получение конфига с циски
+def get_conf(hostname, username, password, type):
     port = 3000
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(hostname, port, username, password)
-    #1,10 - running-config
-    #2,20 - startup-config
+    # 1,10 - running-config
+    # 2,20 - startup-config
     if type == 1:
         stdin, stdout, stderr = ssh.exec_command('sh run view full')
-    elif type ==2:
+    elif type == 2:
         stdin, stdout, stderr = ssh.exec_command('sh start')
-    elif type ==3:
+    elif type == 3:
         stdin, stdout, stderr = ssh.exec_command('sh clock')
     elif type == 10:
         stdin, stdout, stderr = ssh.exec_command('sh start | include Last configuration')
@@ -88,10 +99,12 @@ def get_conf(hostname,username,password,type):
     ssh.close()
     return conf
 
-#Получение runnning-config с циски
+
+# Получение runnning-config с циски
 def get_cisco_run_conf(hostname, username, password):
     return get_conf(hostname, username, password, 1)
 
-#Получение runnning-config с циски
+
+# Получение runnning-config с циски
 def get_cisco_start_conf(hostname, username, password):
     return get_conf(hostname, username, password, 2)

@@ -1,4 +1,5 @@
 <p>Список хостов:</p>
 {% for host in hosts %}
-<p>{{ host }} <a href="hostconfigs/{{host.id}}">Конфигурация</a></p>
+<p>{{ host }} <a href="hostconfigs/{{host.id}}">Конфигурация</a>
+    <a href="showconf/{{host.id}}">Получить конфигурацию</a></p>
 {% endfor %}
