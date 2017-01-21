@@ -1,16 +1,30 @@
+from app.mod_ncm.models import Host
+from app.mod_ncm.models import Configuration
+
+from app.mod_getconf import get_conf
+
 import paramiko
 import re, datetime
 
-def get_last_rev():
-    return None
+
+def get_all_hosts():
+    hosts = Host.query.all()
+    return hosts
 
 
-def get_rev_by_id():
-    return None
+def get_all_configs_by_host_id(host_id):
+    print(type(host_id))
+    print("in get_all")
+    config = Configuration
+    configs = Configuration.query.filter(config.id == host_id).all()
+    # print(configs + " Config")
+    return configs
 
 
-def save_rev():
-    return None
+def get_all_configs():
+    configs = Configuration.query.all()
+    return configs
+
 
 #Уведомление о том, что изменения в running-config не сохранены в startup-config
 def do_wr(hostname,username,password):

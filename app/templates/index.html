@@ -1,0 +1,4 @@
+<p>Список хостов:</p>
+{% for host in hosts %}
+<p>{{ host }} <a href="hostconfigs/{{host.id}}">Конфигурация</a></p>
+{% endfor %}

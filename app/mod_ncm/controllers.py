@@ -1,25 +1,22 @@
-from flask import Blueprint
+from flask import render_template
+from app.utils.utils import *
+from app import app
 
-from app.mod_ncm.models import Host
-
-# Define the blueprint: 'auth', set its url prefix: app.url/auth
-mod_ncm = Blueprint('ncm', __name__, url_prefix='/')
-
-
+print(111)
 # Set the route and accepted methods
-@mod_ncm.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
-    hosts = Host.query.all()
-    output_hosts = ''
-    for host in hosts:
-        output_hosts += '<tr><td>' + host.name + '</td>' + \
-                        '<td>' + host.host_type + '</td>' + \
-                        '<td>' + host.address + '</td></tr>'
-    output = '''<table>
-        <tr>
-            <th>Имя</th>
-            <th>Тип</th>
-            <th>Адресс</th>
-        </tr>''' + output_hosts + \
-             '</table>'
-    return output
+    print("im in index")
+    context = {
+        "hosts": get_all_hosts()
+    }
+    return render_template('index.html', **context)
+
+
+@app.route('/hostconfigs/<int:host_id>')
+def hostconfigs(host_id):
+    print(host_id)
+    context = {
+        'configs': get_all_configs_by_host_id(host_id)
+    }
+    return render_template('hostconfigs.html', **context)
