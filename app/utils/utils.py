@@ -14,7 +14,7 @@ def save_rev():
     return None
 
 
-#проверка даты на cisco (секунды отсекаем)
+#проверка даты на cisco (секунды не берем в расчет)
 def check_date(hostname,username,password):
     cisco_date = get_conf_date(hostname, username, password, 3)
     today_time = datetime.datetime.strftime(datetime.datetime.today(),"%Y-%m-%d %H:%M")
