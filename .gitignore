@@ -1,5 +1,6 @@
 *.sqlite
 venv/
+env/
 __pycache__/
 .git/
 .idea/

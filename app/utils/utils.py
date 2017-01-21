@@ -1,7 +1,6 @@
 from app.mod_ncm.models import Host
 from app.mod_ncm.models import Configuration
 
-from app.mod_getconf import get_conf
 
 import paramiko
 import re, datetime
@@ -24,6 +23,19 @@ def get_all_configs_by_host_id(host_id):
 def get_all_configs():
     configs = Configuration.query.all()
     return configs
+
+
+
+#проверка даты на cisco (секунды не берем в расчет)
+def check_date(hostname,username,password):
+    cisco_date = get_conf_date(hostname, username, password, 3)
+    today_time = datetime.datetime.strftime(datetime.datetime.today(),"%Y-%m-%d %H:%M")
+    cisco_date = datetime.datetime.strftime(cisco_date,"%Y-%m-%d %H:%M")
+    if cisco_date != today_time:
+        bad_date = 1
+    else:
+        bad_date = 0
+    return bad_date
 
 
 #Уведомление о том, что изменения в running-config не сохранены в startup-config
@@ -61,9 +73,11 @@ def get_conf(hostname,username,password,type):
     #1,10 - running-config
     #2,20 - startup-config
     if type == 1:
-        stdin, stdout, stderr = ssh.exec_command('sh  run view full')
+        stdin, stdout, stderr = ssh.exec_command('sh run view full')
     elif type ==2:
-        stdin, stdout, stderr = ssh.exec_command('sh  start')
+        stdin, stdout, stderr = ssh.exec_command('sh start')
+    elif type ==3:
+        stdin, stdout, stderr = ssh.exec_command('sh clock')
     elif type == 10:
         stdin, stdout, stderr = ssh.exec_command('sh start | include Last configuration')
     elif type == 20:
@@ -75,9 +89,9 @@ def get_conf(hostname,username,password,type):
     return conf
 
 #Получение runnning-config с циски
-def get_cisco_run_conf():
-    return None
+def get_cisco_run_conf(hostname, username, password):
+    return get_conf(hostname, username, password, 1)
 
 #Получение runnning-config с циски
-def get_cisco_start_conf():
-    return None
+def get_cisco_start_conf(hostname, username, password):
+    return get_conf(hostname, username, password, 2)
