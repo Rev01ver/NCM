@@ -1,0 +1,27 @@
+.diff{
+	width : 500px;/*shirina tablic*/
+	border : 1px solid green;/*ramka vokrug tablic*/
+	margin : auto;/*viravnivanie tablic po centre ocna */
+	text-align : center ;/*viravnivanie text po centre */
+	
+}
+.diff_add {
+	
+	background-color : #eaffea ;
+}
+.diff_sub{
+	
+	background-color : #ffecec;
+}
+.diff_next{
+
+	width : 35px;
+	background-color: #ffdddd;
+	border-color: #f1c0c0;
+}
+.diff_header {
+
+	width : 35px;
+	background-color :#dbffdb;
+	border-color: #c1e9c1;
+}
