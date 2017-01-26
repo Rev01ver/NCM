@@ -13,7 +13,7 @@
 	width : 500px;/*shirina tablic*/
 	border : 1px solid green;/*ramka vokrug tablic*/
 	margin : auto;/*viravnivanie tablic po centre ocna */
-	text-align : center ;/*viravnivanie text po centre */
+	text-align : left ;/*viravnivanie text po left */
 	
 }
 .diff_add {
@@ -25,13 +25,13 @@
 	background-color : #ffecec;
 }
 .diff_next{
-
+	text-align:center;
 	width : 35px;
 	background-color: #ffdddd;
 	border-color: #f1c0c0;
 }
 .diff_header {
-
+	text-align:center;
 	width : 35px;
 	background-color :#dbffdb;
 	border-color: #c1e9c1;
