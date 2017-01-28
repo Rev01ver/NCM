@@ -25,7 +25,7 @@ def get_all_configs_by_host_id(host_id):
     print(type(host_id))
     print("in get_all")
     config = Configuration
-    configs = Configuration.query.filter(config.id == host_id).all()
+    configs = Configuration.query.filter(config.host_id == host_id).all()
     # print(configs + " Config")
     return configs
 
@@ -49,6 +49,7 @@ def check_date(hostname, username, password):
 
 # Уведомление о том, что изменения в running-config не сохранены в startup-config
 def do_wr(hostname, username, password):
+    print(hostname, username, password)
     run_save_date = get_conf_date(hostname, username, password, 10)
     start_save_date = get_conf_date(hostname, username, password, 20)
     if start_save_date < run_save_date:
@@ -70,7 +71,7 @@ def get_conf_date(hostname, username, password, type):
     date_temp = get_conf(hostname, username, password, type)
     hours = re.findall('\d+:\d+:\d+', date_temp)
     date = re.findall('\w{3} \d{2} \d{4}', date_temp)
-    time = (''.join(hours)) + ' ' + (''.join(date))
+    time = hours[0] + ' ' + date[0]
     time = datetime.datetime.strptime(time, '%H:%M:%S %b %d %Y')
     return time
 
@@ -101,8 +102,14 @@ def get_conf(hostname, username, password, type):
 
 
 # Получение runnning-config с циски
-def get_cisco_run_conf(hostname, username, password):
-    return get_conf(hostname, username, password, 1)
+def get_cisco_run_conf(hostname, host_id, username, password):
+    conf = Configuration()
+    conf.host_id = host_id
+    conf.config_type = 'runnning-config'
+    conf.datetime = get_conf_date(hostname, username, password, 1)
+    conf.data = get_conf(hostname, username, password, 1)
+
+    return conf
 
 
 # Получение runnning-config с циски

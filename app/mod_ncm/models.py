@@ -54,7 +54,7 @@ class Configuration(Base):
         self.host_id = host_id
 
     def __repr__(self):
-        return '<Configuration {} {}'.format(self.config_type, self.datetime)
+        return '<Configuration {} {} {}'.format(self.config_type, self.datetime, self.data)
 
 
 
