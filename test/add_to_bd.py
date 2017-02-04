@@ -1,6 +1,6 @@
 from app import db_session
 from app.mod_ncm.models import User, Configuration, Host
-from app.utils.utils import get_config_by_id
+from app.utils.bd_utils import get_config_by_id
 import datetime
 
 
