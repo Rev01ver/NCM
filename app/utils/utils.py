@@ -10,29 +10,24 @@ def get_all_hosts():
 
 
 def get_host_by_id(host_id):
-    host = Host
-    host = Host.query.filter(host.id == host_id).first()
-    return host
+    return Host.query.filter(Host.id == host_id).first()
 
 
 def get_user_by_id(user_id):
-    user = User
-    user = User.query.filter(user.id == user_id).first()
-    return user
+    return User.query.filter(User.id == user_id).first()
 
 
 def get_all_configs_by_host_id(host_id):
-    print(type(host_id))
-    print("in get_all")
-    config = Configuration
-    configs = Configuration.query.filter(config.host_id == host_id).all()
-    # print(configs + " Config")
-    return configs
+    return Configuration.query.filter(Configuration.host_id == host_id).all()
 
 
 def get_all_configs():
     configs = Configuration.query.all()
     return configs
+
+
+def get_config_by_id(config_id):
+    return Configuration.query.filter(Configuration.id == config_id).first()
 
 
 # проверка даты на cisco (секунды не берем в расчет)
@@ -69,8 +64,11 @@ def get_conf_editor(hostname, username, password, type):
 # Получение даты конфигов циски
 def get_conf_date(hostname, username, password, type):
     date_temp = get_conf(hostname, username, password, type)
+    print(date_temp)
     hours = re.findall('\d+:\d+:\d+', date_temp)
+    print(hours)
     date = re.findall('\w{3} \d{2} \d{4}', date_temp)
+    print(date)
     time = hours[0] + ' ' + date[0]
     time = datetime.datetime.strptime(time, '%H:%M:%S %b %d %Y')
     return time
@@ -108,7 +106,6 @@ def get_cisco_run_conf(hostname, host_id, username, password):
     conf.config_type = 'runnning-config'
     conf.datetime = get_conf_date(hostname, username, password, 1)
     conf.data = get_conf(hostname, username, password, 1)
-
     return conf
 
 

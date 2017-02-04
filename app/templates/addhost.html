@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="POST" action="/addhost/" name="myForm">
+    {{ form.csrf_token }}
+    <p>{{ form.name.label }} {{ form.name(size=20) }}</p>
+    <p>{{ form.host.label }} {{ form.host(size=20) }}</p>
+    <p>{{ form.address.label }} {{ form.address(size=20) }}</p>
+    <input type="submit" value="Save">
+</form>
+</body>
+</html>

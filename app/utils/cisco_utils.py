@@ -15,7 +15,7 @@ password = '123456Zz'
 server = smtplib.SMTP('smtp.mail.ru:587')
 
 # Лог работы с сервером (для отладки) 1 = True
-server.set_debuglevel(0);
+server.set_debuglevel(0)
 
 # Переводим соединение в защищенный режим (Transport Layer Security)
 server.starttls()
