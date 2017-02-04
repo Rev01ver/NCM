@@ -38,12 +38,10 @@ def show_conf(host_id):
     host = get_host_by_id(host_id)
     user = get_user_by_id(host.user_id)
     conf = {
-        'config': get_cisco_run_conf(host.address, host_id, user.username, user.password)
-    }
-    host = {
+        'config': get_cisco_run_conf(host.address, host_id, user.username, user.password),
         'host': host_id
     }
-    return render_template('showconf.html', **conf, **host)
+    return render_template('showconf.html', **conf)
 
 
 @app.route('/showconf/save/<int:host_id>/')
