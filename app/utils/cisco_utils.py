@@ -2,6 +2,7 @@ import smtplib
 import paramiko
 import re, datetime
 import difflib
+from app.mod_ncm.models import Configuration
 # from difflib_data import *
 
 
@@ -155,12 +156,21 @@ def get_conf(ip,username,password,type):
 #     return conf
 
 #Получение runnning-config с циски
-def get_cisco_run_conf(ip, username, password):
-    return get_conf(ip, username, password, 1)
+# def get_cisco_run_conf(ip, username, password):
+#     return get_conf(ip, username, password, 1)
 
-#Получение startup-config с циски
+# Получение startup-config с циски
 def get_cisco_start_conf(ip, username, password):
     return get_conf(ip, username, password, 2)
+
+# Получение runnning-config с циски
+def get_cisco_run_conf(hostname, host_id, username, password):
+    conf = Configuration()
+    conf.host_id = host_id
+    conf.config_type = 'runnning-config'
+    conf.datetime = get_conf_date(hostname, username, password, 10)
+    conf.data = get_conf(hostname, username, password, 1)
+    return conf
 
 
 #Уведомление админа по email

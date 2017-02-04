@@ -1,5 +1,6 @@
 from flask import render_template
 from app.utils.utils import *
+from app.utils.cisco_utils import *
 from app import app
 from app.mod_ncm.models import User, Configuration
 from app import db_session
@@ -48,8 +49,11 @@ def show_conf(host_id):
 @app.route('/showconf/save/<int:host_id>/')
 def save_conf(host_id):
     host = get_host_by_id(host_id)
+    print(host)
     user = get_user_by_id(host.user_id)
+    print(user)
     conf = get_cisco_run_conf(host.address, host_id, user.username, user.password)
+    print(conf)
     db_session.add(conf)
     db_session.commit()
     host = {
@@ -64,7 +68,7 @@ def compare_conf(host_id):
         print('running config has changed')
         host = get_host_by_id(host_id)
         user = get_user_by_id(host.user_id)
-        run_conf = get_cisco_run_conf(host.address, host_id, user.username, user.password)
+        run_conf = get_cisco_run_conf(host.address, user.username, user.password)
         db_session.add(run_conf)
         db_session.commit()
         return '<p>running conf has changed and saved to db</p>'
