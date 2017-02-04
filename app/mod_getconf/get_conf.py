@@ -1,5 +1,6 @@
 import paramiko
 
+
 def get_cisco_conf(host, username, password, config_type):
     port = 3000
 
