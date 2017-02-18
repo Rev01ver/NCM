@@ -1,3 +1,6 @@
+import sys
+sys.path.append("..")
+
 from app import db_session
 from app.mod_ncm.models import User, Configuration, Host
 from app.utils.bd_utils import get_config_by_id

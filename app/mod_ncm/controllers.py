@@ -4,6 +4,7 @@ from app.utils.cisco_utils import *
 from app import app
 from app.mod_ncm.models import User, Configuration
 from app import db_session
+from app.mod_diff.diff import htmldifflib
 
 from flask_wtf import FlaskForm
 from wtforms import StringField
@@ -23,6 +24,28 @@ def index():
         "hosts": get_all_hosts()
     }
     return render_template('index.html', **context)
+
+
+@app.route('/difflib/<int:host_id>')
+def diff(host_id):
+
+    configs = get_all_configs_by_host_id(host_id)
+    context = {
+        "hosts": get_all_hosts(),
+        "configs": configs,
+
+    }
+    
+    return render_template('difflib.html' , **context   ) 
+
+
+@app.route('/ajax/<int:config_id_1>/<int:config_id_2>/' , methods = ['GET'])#Сравнение
+def cal_diff(config_id_1 , config_id_2):
+    config1 = get_config_by_id(config_id_1)
+    config2 = get_config_by_id(config_id_2)
+    html = htmldifflib(config1.data , config2.data)
+    return html 
+    
 
 
 @app.route('/hostconfigs/<int:host_id>')

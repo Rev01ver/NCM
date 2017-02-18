@@ -1,0 +1,147 @@
+<!-- По сути проще было бы если бы я мог выбирать файлы чисто галочкой и запилить кнопку "Сравнение "--> 
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+	<title> Difflib </title>
+	<meta charset  = "utf-8" />
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">	
+
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  	<!--<link rel="stylesheet" href="/resources/demos/style.css">-->
+	
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="/static/js/DragDrop.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script >
+	$( function() {
+		var config_id_1= null; // 1)присваиываьтся первовму брошеному в поле ,должна лежать config id 
+		var config_id_2 = null;
+		
+		function try_get_diff(){
+		 	console.log(config_id_1, config_id_2)
+			if (config_id_1 && config_id_2){// проверяется есть ли эти конфиги 
+				var url = "/ajax/"+ config_id_1+"/"+config_id_2+"/"
+				$.get ( url , function(data){
+					$(".result").html(data);
+				});
+			}
+		}
+		
+		$( ".draggable" ).draggable({revert: true});
+
+		$( "#droppable" ).droppable({
+		 drop: function( event, ui ) {
+		 	$( this )
+		 	.addClass( "ui-state-highlight" )
+		 	.find( "p" )
+		 	.html( "Current: " + ui.draggable.text());
+		 	console.log(ui.draggable.data("id"))
+      		config_id_1 = ui.draggable.data("id")
+      		console.log(config_id_1)
+      		try_get_diff()
+		 }
+		});
+		$( "#droppable1" ).droppable({
+		 drop: function( event, ui ) {
+		 	$( this )
+		 	.addClass( "ui-state-highlight" )
+		 	.find( "p" )
+		 	.html( "Current: " + ui.draggable.text());
+		 	console.log(ui.draggable.data("id"))
+            config_id_2 = ui.draggable.data("id")
+            console.log(config_id_2)
+            try_get_diff()
+
+		 }
+		});
+
+
+
+
+	} );
+
+
+	
+
+		
+
+	</script>
+	<style >
+		body { padding-top: 100px; }
+		#draggable { width: 100px; height: 50px; padding: 0.5em; margin: 10px 10px 10px 0; }
+		#droppable {   height: 100px; padding: 0.5em;  }
+		#droppable1 {  height: 100px; padding: 0.5em;  }
+		.result { height: 600px; width: 100%; background: #fff; border: 1px solid #C1C1C1; overflow-x: scroll; overflow-y: scroll; }
+		.prokrutka{height: 550px; width: 100%;background: #fff; border: 1px solid #C1C1C1; overflow-x: scroll; overflow-y: scroll;}	
+		.diff{width: 100%;border : 1px solid green;margin : auto;text-align : left ;}
+		.diff_add {background-color : red;}
+		.diff_sub{background-color :red ;}
+		.diff_next{	text-align:center;width : 35px;background-color: #ffdddd;border-color: #f1c0c0;}
+		.diff_header {text-align:center;width : 35px;background-color :#dbffdb;border-color: #c1e9c1;}
+		.diff_chg {background-color : red;}/**/
+	</style>
+	
+	
+</head>
+<body>
+
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+	
+  		<div class="container">
+
+  			 <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		   	
+
+		    <a class="navbar-brand" href="/">Главная</a>
+		    </div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			
+			<ul class="nav navbar-nav">
+		
+			</div><!-- /.navbar-collapse -->
+			
+			</div>
+	</nav>
+
+	<div class="row">
+		<div class="col-md-2">
+
+			<ol>
+			{%for config in configs %}
+
+			<li id="draggable" class="ui-widget-content draggable" data-id="{{config.id}}">
+					<p>config-{{config.id}}</p>
+			</li>
+			{% endfor %}
+			<ol>
+	 	</div>
+		<div class="col-md-10">
+
+			<div id="drop">
+				<div id="droppable" class="ui-widget-header droppable col-md-5">
+		 			<p>Drop here 1</p>
+				</div>
+				<div id="droppable1" class="ui-widget-header droppable1 col-md-offset-1 col-md-6">
+		 			<p>Drop here 2 </p>
+				</div>
+		 	</div>
+
+
+	 	<div class="clearfix"></div> <br/>
+	 	<div class="result"></div>
+
+	 	</div>
+ 	</div>
+
+</body>
+
+</html>
