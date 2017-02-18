@@ -1,0 +1,44 @@
+body { padding-top: 70px; }
+
+
+.prokrutka{
+	height: 550px; /* ?????? ?????? ????? */
+	width: 550px; /* ?????? ?????? ????? */
+	background: #fff; /* ???? ????, ????? */
+	border: 1px solid #C1C1C1; /* ?????? ? ???? ??????? ????? */
+	overflow-x: scroll; /* ????????? ?? ??????????? */
+	overflow-y: scroll; /* ????????? ?? ????????? */
+	margin-right : auto;/*viravnivanie tablic po centre ocna */
+	text-align : center ;/*viravnivanie text po centre */
+}	
+.diff{
+	width : 530px;/*shirina tablic*/
+	border : 1px solid green;/*ramka vokrug tablic*/
+	margin : auto;/*viravnivanie tablic po centre ocna */
+	text-align : left ;/*viravnivanie text po centre */
+
+}
+.diff_add {
+	
+	background-color : #eaffea ;
+}
+.diff_sub{
+	
+	background-color : #ffecec;
+}
+.diff_next{
+	text-align:center;
+	width : 35px;
+	background-color: #ffdddd;
+	border-color: #f1c0c0;
+}
+.diff_header {
+	text-align:center;
+	width : 35px;
+	background-color :#dbffdb;
+	border-color: #c1e9c1;
+}
+
+#draggable { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 10px 10px 10px 0; }
+#droppable { width: 200px; height: 300px; padding: 0.5em; ;  float: auto ; margin: auto; }
+#droppable1 { width: 200px; height: 300px; padding: 0.5em; text-align : center; float: left; margin-left: auto  ; }

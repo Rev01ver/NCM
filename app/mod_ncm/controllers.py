@@ -1,8 +1,20 @@
 from flask import render_template
-from app.utils.utils import *
+from app.utils.bd_utils import *
+from app.utils.cisco_utils import *
 from app import app
 from app.mod_ncm.models import User, Configuration
 from app import db_session
+from app.mod_diff.diff import htmldifflib
+
+from flask_wtf import FlaskForm
+from wtforms import StringField
+
+
+class MyForm(FlaskForm):
+    name = StringField('name')
+    host = StringField('host')
+    address = StringField('address')
+
 
 # Set the route and accepted methods
 @app.route('/')
@@ -12,6 +24,28 @@ def index():
         "hosts": get_all_hosts()
     }
     return render_template('index.html', **context)
+
+
+@app.route('/difflib/<int:host_id>')
+def diff(host_id):
+
+    configs = get_all_configs_by_host_id(host_id)
+    context = {
+        "hosts": get_all_hosts(),
+        "configs": configs,
+
+    }
+    
+    return render_template('difflib.html' , **context   ) 
+
+
+@app.route('/ajax/<int:config_id_1>/<int:config_id_2>/' , methods = ['GET'])#Сравнение
+def cal_diff(config_id_1 , config_id_2):
+    config1 = get_config_by_id(config_id_1)
+    config2 = get_config_by_id(config_id_2)
+    html = htmldifflib(config1.data , config2.data)
+    return html 
+    
 
 
 @app.route('/hostconfigs/<int:host_id>')
@@ -27,19 +61,20 @@ def show_conf(host_id):
     host = get_host_by_id(host_id)
     user = get_user_by_id(host.user_id)
     conf = {
-        'config': get_cisco_run_conf(host.address, host_id, user.username, user.password)
-    }
-    host = {
+        'config': get_cisco_run_conf(host.address, host_id, user.username, user.password),
         'host': host_id
     }
-    return render_template('showconf.html', **conf, **host)
+    return render_template('showconf.html', **conf)
 
 
 @app.route('/showconf/save/<int:host_id>/')
 def save_conf(host_id):
     host = get_host_by_id(host_id)
+    print(host)
     user = get_user_by_id(host.user_id)
+    print(user)
     conf = get_cisco_run_conf(host.address, host_id, user.username, user.password)
+    print(conf)
     db_session.add(conf)
     db_session.commit()
     host = {
@@ -48,14 +83,34 @@ def save_conf(host_id):
     return render_template('save.html', **host)
 
 
-@app.route("/compareconf/")
-def compare_conf():
+@app.route("/compareconf/<int:host_id>/")
+def compare_conf(host_id):
     if do_wr('87.228.74.62', 'serg', 'pyTh0n22'):
         print('running config has changed')
-        # run_conf = get_cisco_run_conf()
+        host = get_host_by_id(host_id)
+        user = get_user_by_id(host.user_id)
+        run_conf = get_cisco_run_conf(host.address, user.username, user.password)
+        db_session.add(run_conf)
+        db_session.commit()
+        return '<p>running conf has changed and saved to db</p>'
     else:
         print('running config the same')
-    return '<p>success</p>'
+        return '<p>running config the same</p>'
+
+
+@app.route('/addhost/') #wtforms
+def add_host():
+    form = MyForm()
+    return render_template("addhost.html", form=form)
+    # host = Host()
+
+
+@app.route('/ajax/<int:host_id>/<int:config1_id>/<int:config2_id>/')
+def ajax(host_id):
+    host = get_host_by_id(host_id)
+    config1 = get_cisco_run_conf()
+
+
 
 
 
